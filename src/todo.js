@@ -27,3 +27,6 @@ class TODO {
     currentTask.editTask(newName);
   }
 }
+
+
+export {Tasks, TODO}
