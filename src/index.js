@@ -10,6 +10,7 @@ class TodoController {
   }
   removeTask(taskId) {
     this.todo.removeTask(taskId);
+    this.view.renderTasksToBody(this.todo.tasks); 
   }
   addTask(taskName) {
     const newTask = new Tasks(taskName);
@@ -17,20 +18,22 @@ class TodoController {
   }
   editTask(taskId, newName) {
     this.todo.editTask(taskId, newName);
+    this.view.renderTasksToBody(this.todo.tasks); 
   }
   updateView() {
     this.view.renderTasksToConsole(this.todo.tasks);
     this.view.renderTasksToBody(this.todo.tasks);
   }
+
 }
 
 class TodoView {
-  removeTask(taskId) {}
   renderTasksToConsole(tasks) {
     tasks.forEach((task) => console.log(task.name));
   }
   renderTasksToBody(tasks) {
     const todoDiv = document.getElementById("todo");
+    todoDiv.innerHTML = "";
     tasks.forEach((task) => {
       let taskDiv = document.createElement("div");
       taskDiv.className = "tasksDiv";
@@ -38,20 +41,20 @@ class TodoView {
       let iconsDiv = document.createElement("div");
       iconsDiv.className = "iconsDiv";
   
-      // ✅ Create Checkbox
+      // Create Checkbox
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.id = task.id;
       checkbox.name = task.name;
       checkbox.checked = true;
   
-      // ✅ Create Label
+      // Create Label
       const label = document.createElement("label");
       label.htmlFor = task.name;
       label.textContent = task.name;
       label.style.width = "100px";
   
-      // ✅ Create Edit and Delete Icons
+      // Create Edit and Delete Icons
       const editIcon = document.createElement("img");
       const deleteIcon = document.createElement("img");
   
@@ -59,19 +62,27 @@ class TodoView {
       deleteIcon.src = delete_icon;
       editIcon.style.height = "20px";
       deleteIcon.style.height = "20px";
+
+      // Attach Click Event Handlers
+      editIcon.addEventListener("click", () => this.handleEditClick(task.id));
+      deleteIcon.addEventListener("click", () => this.handleDeleteClick(task.id));
   
-      // ✅ Append icons to iconsDiv
+      // Append icons to iconsDiv
       iconsDiv.appendChild(editIcon);
       iconsDiv.appendChild(deleteIcon);
   
-      // ✅ Append checkbox, label, and iconsDiv to taskDiv
+      // Append checkbox, label, and iconsDiv to taskDiv
       taskDiv.appendChild(checkbox);
       taskDiv.appendChild(label);
       taskDiv.appendChild(iconsDiv);
   
-      // ✅ Append taskDiv to todoDiv
+      // Append taskDiv to todoDiv
       todoDiv.appendChild(taskDiv);
     });
+  }
+  setEventHandlers(controller) {
+    this.handleEditClick = (taskId) => controller.editTask(taskId);
+    this.handleDeleteClick = (taskId) => controller.removeTask(taskId);
   }
 }
 
@@ -84,6 +95,7 @@ class App {
     const toDoModel = new TODO();
     const toDoView = new TodoView();
     this.toDoController = new TodoController(toDoModel, toDoView);
+    toDoView.setEventHandlers(this.toDoController);
   }
   createTasks() {
     this.toDoController.addTask("John");
