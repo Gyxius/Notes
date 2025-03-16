@@ -95,6 +95,15 @@ body {
     align-items: center;
 }
 
+.tasksDiv {
+    display: flex;
+}
+
+.iconsDiv {
+    padding-left: 50px;
+}
+
+
 * {
     outline: solid red 1px;
 }

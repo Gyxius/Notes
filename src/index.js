@@ -33,13 +33,43 @@ class TodoView {
     const todoDiv = document.getElementById("todo");
     tasks.forEach((task) => {
       let taskDiv = document.createElement("div");
-      taskDiv.innerHTML = 
-      `
-        <div>
-            <input type="checkbox" id="${task.id}" name="${task.name}" checked />
-            <label for="${task.name}">${task.name}</label>
-        </div>
-      `;
+      taskDiv.className = "tasksDiv";
+  
+      let iconsDiv = document.createElement("div");
+      iconsDiv.className = "iconsDiv";
+  
+      // ✅ Create Checkbox
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = task.id;
+      checkbox.name = task.name;
+      checkbox.checked = true;
+  
+      // ✅ Create Label
+      const label = document.createElement("label");
+      label.htmlFor = task.name;
+      label.textContent = task.name;
+      label.style.width = "100px";
+  
+      // ✅ Create Edit and Delete Icons
+      const editIcon = document.createElement("img");
+      const deleteIcon = document.createElement("img");
+  
+      editIcon.src = edit_icon;
+      deleteIcon.src = delete_icon;
+      editIcon.style.height = "20px";
+      deleteIcon.style.height = "20px";
+  
+      // ✅ Append icons to iconsDiv
+      iconsDiv.appendChild(editIcon);
+      iconsDiv.appendChild(deleteIcon);
+  
+      // ✅ Append checkbox, label, and iconsDiv to taskDiv
+      taskDiv.appendChild(checkbox);
+      taskDiv.appendChild(label);
+      taskDiv.appendChild(iconsDiv);
+  
+      // ✅ Append taskDiv to todoDiv
       todoDiv.appendChild(taskDiv);
     });
   }
@@ -65,15 +95,3 @@ class App {
 const myApp = new App();
 myApp.createTasks();
 
-const todoDiv = document.getElementById("todo");
-
-// Add icons
-
-const editImg = document.createElement("img");
-const deleteImg = document.createElement("img");
-editImg.src = edit_icon;
-deleteImg.src = delete_icon;
-editImg.style.height = "20px";
-deleteImg.style.height = "20px";
-todoDiv.appendChild(editImg);
-todoDiv.appendChild(deleteImg);
